@@ -1,12 +1,12 @@
 from http import HTTPStatus
- 
+
 from django.urls import reverse
 from pytest_django.asserts import assertFormError, assertRedirects
- 
+
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
- 
- 
+
+
 def test_user_can_create_comment(
         author_client,
         news,
@@ -16,7 +16,7 @@ def test_user_can_create_comment(
     url = reverse('news:detail', kwargs={'pk': news.pk})
     response = author_client.post(url, data=form_data)
     assertRedirects(response,
-                   reverse(
+                    reverse(
                         'news:detail',
                         kwargs={'pk': news.pk}
                     ) + '#comments'

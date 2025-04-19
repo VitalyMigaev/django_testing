@@ -28,10 +28,8 @@ class Note(models.Model):
         on_delete=models.CASCADE,
     )
 
-
     def __str__(self):
         return self.title
-
 
     def save(self, *args, **kwargs):
         if not self.slug:

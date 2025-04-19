@@ -114,7 +114,7 @@ class TestNoteEditDelete(TestCase):
         self.assertEqual(self.notes.title, self.NOTE_TITLE)
         self.assertEqual(self.notes.text, self.NOTE_TEXT)
 
- 
+
 class TestNoteSlug(TestCase):
     NOTE_TITLE = 'Заметка про погоду'
     NOTE_TEXT = 'Текст заметки про погоду'
