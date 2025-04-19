@@ -4,8 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import include, path
 from django.views.generic import CreateView
 
+
+from notes import views
+
+app_name = 'note'
+
 urlpatterns = [
     path('', include('notes.urls')),
+    path('note/<int:pk>/', views.NoteDetail.as_view(), name='detail'),
     path('admin/', admin.site.urls),
 ]
 
