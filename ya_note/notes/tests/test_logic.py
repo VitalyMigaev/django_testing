@@ -49,8 +49,6 @@ class TestNoteEditDelete(TestFixtures):
         self.assertEqual(notes_count, notes_count_before_test)
 
     def test_author_can_edit_comment(self):
-        original_title = self.note.title
-        original_text = self.note.text
         response = self.author_client.post(
             self.url_notes_edit,
             data=self.form_new_data
@@ -59,7 +57,7 @@ class TestNoteEditDelete(TestFixtures):
         edited_note = Note.objects.get(id=self.note.id)
         self.assertEqual(edited_note.title, self.form_new_data['title'])
         self.assertEqual(edited_note.text, self.form_new_data['text'])
-        elf.assertEqual(edited_note.author, self.note.author)
+        self.assertEqual(edited_note.author, self.note.author)
 
     def test_user_cant_edit_comment_of_another_user(self):
         original_title = self.note.title
