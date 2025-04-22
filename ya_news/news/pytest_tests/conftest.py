@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytest
 from django.conf import settings
 from django.test.client import Client
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 from news.models import Comment, News
 
@@ -75,7 +75,6 @@ def news_with_comments(
             news=news,
             author=author,
             text=f'Комментарий {index} к новости {news.id}!',
-            created=today - timedelta(days=index),
         )
         for index in range(5)
     )
@@ -83,34 +82,44 @@ def news_with_comments(
         comment.created = today - timedelta(days=index)
         comment.save()
 
-    return news
 
 
 @pytest.fixture
 def url_home():
-    home_url = reverse_lazy('news:home')
-    return home_url
-
-
-@pytest.fixture
-def url_detail_comment(comment):
-    news_detail_url = reverse_lazy('news:detail', args=[comment.pk])
-    return news_detail_url
+    return reverse('news:home')
 
 
 @pytest.fixture
 def url_detail_news(news):
-    news_detail_url = reverse_lazy('news:detail', args=[news.pk])
+    news_detail_url = reverse('news:detail', args=[news.pk])
     return news_detail_url
 
 
 @pytest.fixture
 def url_edit_comment(comment):
-    news_detail_url = reverse_lazy('news:edit', args=[comment.pk])
+    news_detail_url = reverse('news:edit', args=[comment.pk])
     return news_detail_url
 
 
 @pytest.fixture
 def url_delete_comment(comment):
-    news_detail_url = reverse_lazy('news:delete', args=[comment.pk])
+    news_detail_url = reverse('news:delete', args=[comment.pk])
     return news_detail_url
+
+
+@pytest.fixture
+def url_users_login():
+    url = reverse('users:login')
+    return url
+
+
+@pytest.fixture
+def url_users_logout():
+    url = reverse('users:logout')
+    return url
+
+
+@pytest.fixture
+def url_users_signup():
+    url = reverse('users:signup')
+    return url

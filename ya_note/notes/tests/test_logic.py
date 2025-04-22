@@ -25,7 +25,7 @@ class TestCreateNote(TestFixtures):
             data=self.form_data
         )
         notes_count = Note.objects.count()
-        self.assertEqual(notes_count, notes_count_before_test + 1)
+        self.assertEqual(notes_count, 1)
         self.assertRedirects(response, f'{self.url_notes_add}')
         note = Note.objects.get()
         self.assertEqual(note.title, self.form_data['title'])
@@ -50,26 +50,33 @@ class TestNoteEditDelete(TestFixtures):
         self.assertEqual(notes_count, notes_count_before_test)
 
     def test_author_can_edit_comment(self):
+        original_title = self.note.title
+        original_text = self.note.text
         response = self.author_client.post(
             self.url_notes_edit,
             data=self.form_new_data
         )
         self.assertRedirects(response, self.url_notes_success)
         edited_note = Note.objects.get(id=self.note.id)
+        self.assertNotEqual(edited_note.title, original_title)
+        self.assertNotEqual(edited_note.text, original_text)
         self.assertEqual(edited_note.title, self.form_new_data['title'])
         self.assertEqual(edited_note.text, self.form_new_data['text'])
         self.assertEqual(edited_note.author, self.author)
 
+
     def test_user_cant_edit_comment_of_another_user(self):
+        original_title = self.note.title
+        original_text = self.note.text
         response = self.reader_client.post(
             self.url_notes_edit,
             data=self.form_data
         )
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         edited_note = Note.objects.get(id=self.note.id)
-        self.assertEqual(edited_note.title, self.form_data['title'])
-        self.assertEqual(edited_note.text, self.form_data['text'])
-        self.assertEqual(edited_note.author, self.author)
+        self.assertEqual(edited_note.title, original_title)
+        self.assertEqual(edited_note.text, original_text)
+        self.assertEqual(edited_note.author, self.note.author)
 
 
 class TestNoteSlug(TestFixtures):
@@ -98,8 +105,8 @@ class TestNoteSlug(TestFixtures):
             self.url_notes_add,
             data=self.form_data
         )
-        self.assertEqual(Note.objects.count(), notes_count_before_test + 1)
+        self.assertEqual(Note.objects.count(), 1)
         self.assertRedirects(response, self.url_notes_success)
-        new_note = Note.objects.get(title=self.form_data['title'])
+        new_note = Note.objects.get()
         expected_slug = slugify(self.form_data['title'])
         self.assertEqual(new_note.slug, expected_slug)
