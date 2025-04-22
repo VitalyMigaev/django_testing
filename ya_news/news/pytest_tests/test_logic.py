@@ -23,7 +23,7 @@ def test_user_can_create_comment(
     Comment.objects.all().delete()
     response = author_client.post(url_detail_news, data=FORM_DATA)
     assertRedirects(response,
-                   reverse(
+                    reverse(
                         'news:detail',
                         kwargs={'pk': news.pk}
                     ) + '#comments'
@@ -102,7 +102,7 @@ def test_author_can_delete_own_comment(
 
 def test_user_cant_delete_other_users_comment(
         reader_client, comment, url_delete_comment,
-    ):
+):
     comments_count = Comment.objects.count()
     response = reader_client.post(url_delete_comment)
     assert response.status_code == HTTPStatus.NOT_FOUND

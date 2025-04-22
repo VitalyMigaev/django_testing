@@ -80,8 +80,8 @@ def news_with_comments(
         for index in range(5)
     )
     for index, comment in enumerate(comments):
-         comment.created = today - timedelta(days=index)
-         comment.save()
+        comment.created = today - timedelta(days=index)
+        comment.save()
 
     return news
 

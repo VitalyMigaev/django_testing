@@ -59,4 +59,3 @@ class TestRoutes(TestFixtures):
             expected_url = f'{login_url}?next={url}'
             response = client.get(url)
             self.assertRedirects(response, expected_url)
-    
