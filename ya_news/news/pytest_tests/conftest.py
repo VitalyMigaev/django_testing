@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import pytest
 from django.conf import settings
 from django.test.client import Client
+from django.urls import reverse_lazy
 
 from news.models import Comment, News
 
@@ -53,7 +54,7 @@ def comment(author, news):
 @pytest.fixture
 def news_data(db):
     today = datetime.today()
-    news_items = News.objects.bulk_create(
+    News.objects.bulk_create(
         News(
             title=f'News {index}',
             text=f'Text of news: {index}.',
@@ -61,7 +62,6 @@ def news_data(db):
         )
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
-    return news_items
 
 
 @pytest.fixture
@@ -70,7 +70,7 @@ def news_with_comments(
         news
 ):
     today = datetime.today()
-    Comment.objects.bulk_create(
+    comments = Comment.objects.bulk_create(
         Comment(
             news=news,
             author=author,
@@ -79,12 +79,38 @@ def news_with_comments(
         )
         for index in range(5)
     )
+    for index, comment in enumerate(comments):
+         comment.created = today - timedelta(days=index)
+         comment.save()
+
     return news
 
 
 @pytest.fixture
-def form_data(author):
-    return {
-        'text': 'Новый комментарий',
-        'author': author,
-    }
+def url_home():
+    home_url = reverse_lazy('news:home')
+    return home_url
+
+
+@pytest.fixture
+def url_detail_comment(comment):
+    news_detail_url = reverse_lazy('news:detail', args=[comment.pk])
+    return news_detail_url
+
+
+@pytest.fixture
+def url_detail_news(news):
+    news_detail_url = reverse_lazy('news:detail', args=[news.pk])
+    return news_detail_url
+
+
+@pytest.fixture
+def url_edit_comment(comment):
+    news_detail_url = reverse_lazy('news:edit', args=[comment.pk])
+    return news_detail_url
+
+
+@pytest.fixture
+def url_delete_comment(comment):
+    news_detail_url = reverse_lazy('news:delete', args=[comment.pk])
+    return news_detail_url
