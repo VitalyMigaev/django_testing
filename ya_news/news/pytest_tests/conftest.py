@@ -83,7 +83,6 @@ def news_with_comments(
         comment.save()
 
 
-
 @pytest.fixture
 def url_home():
     return reverse('news:home')

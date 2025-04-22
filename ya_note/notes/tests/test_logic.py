@@ -19,7 +19,6 @@ class TestCreateNote(TestFixtures):
 
     def user_can_create_note(self):
         Note.objects.all().delete()
-        notes_count_before_test = Note.objects.count()
         response = self.author_client.post(
             self.url_notes_add,
             data=self.form_data
@@ -64,7 +63,6 @@ class TestNoteEditDelete(TestFixtures):
         self.assertEqual(edited_note.text, self.form_new_data['text'])
         self.assertEqual(edited_note.author, self.author)
 
-
     def test_user_cant_edit_comment_of_another_user(self):
         original_title = self.note.title
         original_text = self.note.text
@@ -98,7 +96,6 @@ class TestNoteSlug(TestFixtures):
 
     def test_empty_slug(self):
         Note.objects.all().delete()
-        notes_count_before_test = Note.objects.count()
         if 'slug' in self.form_data:
             self.form_data.pop('slug')
         response = self.author_client.post(

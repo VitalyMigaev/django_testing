@@ -1,6 +1,5 @@
 import pytest
 from django.conf import settings
-from django.urls import reverse
 
 from news.forms import CommentForm
 
@@ -21,7 +20,7 @@ def test_news_order(client, news_data, url_home):
 
 def test_comments_order(
         client, news_with_comments, url_detail_news,
-    ):
+):
     response = client.get(url_detail_news)
     comments = response.context['news'].comment_set.all()
     all_dates = [comment.created for comment in comments]
