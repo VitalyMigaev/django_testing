@@ -68,9 +68,9 @@ def test_author_can_edit_own_comment(
     response = author_client.post(url_edit_comment, data=FORM_DATA)
     assert response.status_code == HTTPStatus.FOUND
     comment_from_db = Comment.objects.get(id=comment.pk)
-    assert comment_from_db == comment
     assert comment_from_db.text == FORM_DATA['text']
     assert comment_from_db.author == comment.author
+    assert comment_from_db.news == news
 
 
 def test_user_cant_edit_other_users_comment(

@@ -57,11 +57,9 @@ class TestNoteEditDelete(TestFixtures):
         )
         self.assertRedirects(response, self.url_notes_success)
         edited_note = Note.objects.get(id=self.note.id)
-        self.assertNotEqual(edited_note.title, original_title)
-        self.assertNotEqual(edited_note.text, original_text)
         self.assertEqual(edited_note.title, self.form_new_data['title'])
         self.assertEqual(edited_note.text, self.form_new_data['text'])
-        self.assertEqual(edited_note.author, self.author)
+        elf.assertEqual(edited_note.author, self.note.author)
 
     def test_user_cant_edit_comment_of_another_user(self):
         original_title = self.note.title

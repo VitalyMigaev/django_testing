@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-
 from notes.tests.test_fixtures import TestFixtures
 
 
